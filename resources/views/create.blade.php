@@ -42,7 +42,8 @@
                         
                         @error('postTitle')
                         <div class="invalid-feedback">
-                            <small class="text-danger">Post ခေါင်းစဉ်ဖြည့်ရန် လိုအပ်ပါသည်</small>
+                            {{-- <small class="text-danger">Post ခေါင်းစဉ်ဖြည့်ရန် လိုအပ်ပါသည်</small> --}}
+                            {{$message}}
                         </div>
                         @enderror
 
@@ -51,7 +52,8 @@
                         <textarea name="postDescription" class="form-control @error('postDescription') is-invalid @enderror" id="" cols="30" placeholder="Enter Post Description" rows="10"> {{old('postDescription')}} </textarea>
                         @error('postDescription')
                             <div class="invalid-feedback">
-                            <small class="text-danger">Post Description ဖြည့်ရန် လိုအပ်ပါသည်</small>
+                            {{-- <small class="text-danger">Post Description ဖြည့်ရန် လိုအပ်ပါသည်</small> --}}
+                            {{$message}}
                         </div>
                         @enderror
                     </div>

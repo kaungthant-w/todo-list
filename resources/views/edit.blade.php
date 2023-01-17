@@ -11,11 +11,25 @@
                     <input type="hidden" name="postId" value="{{$post['id']}}">
                     <div class="form-group my-3">
                         <label for="">Post Title</label>
-                        <input type="text" name="postTitle" id="" class="form-control" value=" {{$post['title']}} " placeholder="Enter post title..." required>
+                        <input type="text" name="postTitle" id="" class="form-control @error("postTitle")
+                            is-invalid 
+                        @enderror" value=" {{old('postTitle',$post['title'])}} " placeholder="Enter post title...">
+                        @error('postTitle')
+                            <div class="invalid-feedback">
+                                {{$message}}
+                            </div>
+                        @enderror
                     </div>
                     <div class="form-group">
                         <label for="">Post Description</label>
-                        <textarea name="postDescription" id="" cols="30" rows="10" class="form-control" placeholder="Enter post description..." required> {{$post['description']}} </textarea>
+                        <textarea name="postDescription" id="" cols="30" rows="10" class="form-control @error('postDescription')
+                            is-invalid
+                        @enderror" placeholder="Enter post description..."> {{old('postDescription',$post['description'])}} </textarea>
+                        @error("postDescription")
+                            <div class="invalid-feedback">
+                                {{$message}}
+                            </div>
+                        @enderror
                     </div>
                     <div class="row my-3">
                         <div class="col-3 offset-9 offset-md-8">

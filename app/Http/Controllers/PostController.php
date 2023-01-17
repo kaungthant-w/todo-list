@@ -24,16 +24,23 @@ class PostController extends Controller
         //     'title' => $request -> postTitle,
         //     'description' => $request -> postDescription
         // ];
-
         // dd($data);
 
-        $validationRules =  [
-            'postTitle' => 'required',
-            'postDescription' => 'required'
-        ];
+        
 
-        Validator::make($request->all(),$validationRules)->validate();
+        // $validator = Validator::make($request -> all(), [
+        //     'postTitle' => 'required',
+        //     'postDescription' => 'required',
+        // ]);
 
+        // if($validator -> fails()) {
+        //     return back()
+        //             -> withErrors($validator)
+        //             -> withInput();
+        // }
+
+ 
+        $this -> postValidationCheck($request);
         $data = $this -> getPostData($request);
         // dd($data);
         Post::create($data);
@@ -81,6 +88,7 @@ class PostController extends Controller
 
         // dd($id);
         // $updateData = $this -> getUpdateData($request);
+        $this -> postValidationCheck($request);
         $updateData = $this -> getPostData($request);
         // dd($updateData);
 
@@ -113,6 +121,24 @@ class PostController extends Controller
             'title' => $request->postTitle,
             'description' => $request->postDescription
         ];
+    }
+
+    //post validation check
+    private function postValidationCheck($request) {
+        $validationRules =  [
+            'postTitle' => 'required|min:5|max:50|unique:posts,title',
+            'postDescription' => 'required'
+        ];
+
+        $validationMessage = [
+            'postTitle.required' => 'Post Title ဖြည့်ရန် လိုအပ်ပါသည်။',
+            'postDescription.required' => 'Post Description  ဖြည့်ရန် လိုအပ်ပါသည်။',
+            'postTitle.min' => 'အနည်းဆုံး ၅ လုံးအထက်ရှိရပါမည်။',
+            'postTitle.unique' => 'Post Title ခေါင်းစဉ်တူနေပါသည်။ ထပ်မံ ရိုက်ကြည့်ပါ။'
+        ];
+
+        Validator::make($request->all(),$validationRules, $validationMessage)->validate();
+
     }
     
 }
