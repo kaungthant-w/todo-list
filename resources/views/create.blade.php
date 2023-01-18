@@ -41,10 +41,10 @@
                     <input type="text" name="postTitle" class="form-control @error('postTitle') is-invalid @enderror" placeholder="Enter Post Title..." value=" {{old('postTitle')}} ">
                         
                         @error('postTitle')
-                        <div class="invalid-feedback">
-                            {{-- <small class="text-danger">Post ခေါင်းစဉ်ဖြည့်ရန် လိုအပ်ပါသည်</small> --}}
-                            {{$message}}
-                        </div>
+                            <div class="invalid-feedback">
+                                {{-- <small class="text-danger">Post ခေါင်းစဉ်ဖြည့်ရန် လိုအပ်ပါသည်</small> --}}
+                                {{$message}}
+                            </div>
                         @enderror
 
                     </div>
@@ -68,15 +68,29 @@
                     @foreach ($posts as $item )
                     <div class="post p-3 shadow-sm mb-4">
                         <div class="row">
-                        <h5 class="col-8"> {{$item['title']}} </h5>
-                        {{-- <div class="col">{{ $item['created_at'] }}</div> --}}
+                        <h5 class="col-8"> {{$item->title}} </h5>
+                        <div class="col">{{ $item->created_at->format('j-F-Y | n:i:A') }}</div>
                         </div>
                         {{-- <p class="text-muted"> {{$item['description']}} </p> --}}
                         {{-- <p class="text-muted"> {{substr($item['description'],0,100)}} </p> --}}
 
                         <p class="text-muted">{{ Str::words($item['description'],18,'...') }}</p>
-                        <div class="text-end">
-                            <a href="{{ route("post#delete", $item['id']) }}" class="btn btn-sm btn-danger"> <i class="fa-solid fa-trash"></i> ဖျက်ရန် </a>
+                        <div class="d-flex justify-content-between ">
+                            <div class="">
+                                <span class="text-primary">
+                                    <i class="fa-solid fa-money-bill-1"> 
+                                    </i>
+                                    {{$item -> price}} kyats
+                                </span> | 
+                                <span class="text-danger">
+                                    <i class="fa-solid fa-location-dot"></i> {{$item -> address}}
+                                </span> | 
+                                <span class="text-warning">
+                                    <i class="fa-solid fa-star"></i> {{$item -> rating}}
+                                </span>
+                            </div>
+                            <div class="">
+                                <a href="{{ route("post#delete", $item['id']) }}" class="btn btn-sm btn-danger"> <i class="fa-solid fa-trash"></i> ဖျက်ရန် </a>
 
                             {{-- <form action="{{route('post#delete',$item['id'])}}" method="post">
                                 @csrf
@@ -87,6 +101,7 @@
                             <a href=" {{route('post#updatePage', $item['id'])}} ">
                                 <button class="btn btn-sm btn-primary"> <i class="fa-solid fa-file-lines"></i> အပြည့်အစုံအဖတ်ရန်</button>
                             </a>
+                            </div>
                         </div>
                     </div>
                     @endforeach                       

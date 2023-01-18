@@ -10,6 +10,7 @@
                     {{-- {{$post[0]['description']}} --}}
                     {{$post['description']}}
                 </p>
+                {{ $post['created_at']->format("j-F-Y | n:i A") }}
             </div>
             <div class="row my-3">
                 <div class="col-3 offset-10 offset-md-8">

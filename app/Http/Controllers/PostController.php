@@ -68,7 +68,7 @@ class PostController extends Controller
     public function updatePage($id) {
         // dd($id);
         // $post = Post::where('id', $id)->get()->toArray();
-        $post = Post::where('id', $id)->first()->toArray();
+        $post = Post::where('id', $id)->first();
         // $post = Post::get()->toArray();
         // $post = Post::first()->toArray();
         // dd($post);
@@ -84,8 +84,9 @@ class PostController extends Controller
     //update post
     // public function update(Request $request, $id) {
     public function update(Request $request) {
+        
+        // dd($request->postId);
         // dd($request->all());
-
         // dd($id);
         // $updateData = $this -> getUpdateData($request);
         $this -> postValidationCheck($request);
@@ -125,9 +126,10 @@ class PostController extends Controller
 
     //post validation check
     private function postValidationCheck($request) {
+        // dd($status);
         $validationRules =  [
-            'postTitle' => 'required|min:5|max:50|unique:posts,title',
-            'postDescription' => 'required'
+            'postTitle' => 'required|min:5|max:50|unique:posts,title,'.$request -> postId,
+            'postDescription' => 'required|min:5'
         ];
 
         $validationMessage = [
