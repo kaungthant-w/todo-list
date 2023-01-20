@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
@@ -11,9 +12,157 @@ class PostController extends Controller
     //customer create page
     public function create() {
         $posts = Post::orderBy("created_at",'desc')->paginate(3);
-        // dd($posts['total']);
-        // dd($posts[0]["title"]);
-        // dd($posts->total());
+
+        // $posts = Post::where("id", "<", "6")->where('address','pyay')->get()->toArray();
+        // $posts = Post::where('address','pyay')->get()->toArray();
+        // $posts = Post::get();
+        // $posts = Post::first()->toArray();
+        // $posts = Post::get()->last();
+        // $posts = Post::all()->toArray();
+        // $posts = Post::first()->toArray();
+        // $posts = Post::pluck('description');
+        // $posts = Post::select("title")->get()->toArray();
+        // $posts = Post::select("*")->get()->toArray();
+        // $posts = Post::get()->toArray();
+        // $posts = Post::select("title")->get();
+        // $posts = Post::pluck("title","id");
+        // $posts = Post::pluck("title","description");
+        // $posts = Post::pluck("title","address");
+        // $posts = Post::where("id",'<', '6')->pluck("title");
+        // $posts = Post::pluck('title');
+        // $posts = Post::get()->pluck('title');
+        // $posts = Post::get()->random();
+        // $posts = Post::all()->random();
+        // $posts = Post::where("id", "<",11)->get()->random();
+        // $posts = Post::where("address", 'yangon')->get()->random();
+        // $posts = Post::where('id','<',20)->where("address", 'pyay')->get()->random();
+        // $posts = Post::where('id','<',90)->where("address", 'pyay')->get();
+
+        // where &&
+        // orWhere ||
+        // $posts = Post::where("id","<", 5) -> where("address", 'pyay')->get();
+        // $posts = Post::orWhere("id","<",10) -> orWhere("address", 'pyay')->get();
+        // $posts = Post::orderBy("id", "asc")->get();
+        // $posts = Post::orderBy("id", "desc")->get();
+        // $posts = Post::orderBy("price",'desc')->get();
+        // $posts = Post::orderBy("price",'asc')->get();
+        // $posts = Post::whereBetween("price", [3000, 5000])->get();
+        // $posts = Post::whereBetween("price", [3000, 9000])->get();
+        // $posts = Post::whereBetween("price", [3000,9000])->orderBy('price','asc')->get();
+        // $posts = Post::select('id','address',"price")->whereBetween("price", [3000,9000])->orderBy('price','asc')->get();
+        // $posts = Post::select("id",'address','price')
+        //         ->where('address','bago')
+        //         ->whereBetween("price",[3000, 9000])
+        //         ->orderBy("price",'asc')
+                // ->get();
+        
+        // $posts = Post::select("id",'address','price')
+        //         ->where('address','bago')
+        //         ->whereBetween("price",[3000, 9000])
+        //         ->orderBy("price",'asc')
+        //         ->dd();        
+
+        // $posts = Post::dd();
+        // $posts = Post::where("address",'pyay')->dd();
+        // $posts = DB::table('users')->where("address", 'pyay')->orderBy('price','asc')->dd();
+        // $posts = Post::where("address", 'pyay')->orderBy('price','asc')->dd();
+
+        // $posts = DB::table("users")->where("address", "pyay");
+        // $posts = Post::where('address', "pyay")->orderBy("price", 'asc')->value("title");
+        // $posts = Post::where('address', "pyay")->orderBy("price", 'asc')->value("description");
+        // $posts = Post::where('address', "pyay")->orderBy("price", 'asc')->value("price");
+        // $posts = Post::where('address', "pyay")->orderBy("price", 'asc')->value("rating");
+        // $posts = Post::where('address', "pyay")->where("id",'<',20)->orderBy("price", 'asc')->get(['title','price',"description"])->toArray();
+        // $posts = Post::where("address",'pyay')->orderBy('price','asc')->get()->toArray();
+        // $posts = Post::select("title",'price')
+        //         ->where("address","pyay")
+        //         ->orderBy("price","asc")
+        //         ->get()
+        //         ->toArray();
+        // $posts = DB::table("users")->find(3);
+        // $posts= Post::find(3)->toArray();
+        // $posts = Post::where("id", 3)->get()->toArray();
+        // $posts = Post::where("id", 3)->first();
+        // $posts = DB::table("posts")->pluck("title");
+        // $posts = DB::table("posts")->pluck("price");
+        // foreach($posts as $title) {
+        //     dd($title);
+        // }
+
+        // $posts = Post::count();
+        // $posts = Post::max('price');
+        // $posts = Post::min('price');
+        // $posts = Post::avg('price');
+        // $posts = Post::where("address", 'pyay')->exists();
+        // $posts = Post::where("address", 'mandalay')->exists();
+        // $posts = Post::where("address", 'singapore')->exists();
+        // $posts = Post::where("address", 'malaysia')->doesntExist();
+        // $posts = Post::select("id","title","price")->get()->toArray();
+        // $posts = Post::select("id","title as post_title","title","price")->get()->toArray();
+        // $posts = Post::select("id","title as a_title","title as b_title","price")
+        // ->get()
+        // ->toArray();
+        // $posts = Post::select(DB::raw("count(address) as address_count"))
+        // ->get()
+        // ->toArray();
+        // $posts = Post::select(DB::raw("count(price) as price_count"))
+        // ->get()
+        // ->toArray();
+        // 
+        // $posts = Post::select('address',DB::raw("count(address) as count"), DB::raw("MAX(price) as total_price"))
+        // ->groupBy('address')
+        // ->get()
+        // ->toArray();
+
+        // $posts = Post::select('address',DB::raw("count(address) as count"), DB::raw("MIN(price) as total_price"))
+        // ->groupBy('address')
+        // ->get()
+        // ->toArray();
+
+        // $posts = Post::select('address',DB::raw("count(address) as count"), DB::raw("SUM(price) as total_price"))
+        // ->groupBy('address')
+        // ->get()
+        // ->toArray();
+
+        // $posts = Post::select('address',DB::raw("count(address) as count"), DB::raw("AVG(price) as total_price"))
+        // ->groupBy('address')
+        // ->get()
+        // ->toArray();
+        // dd($posts);
+
+        // $posts = Post::select('address',DB::raw("count(address) as count"), DB::raw("AVG(price) as total_price"))
+        // ->groupBy('address')
+        // ->get()
+        // ->toArray();
+        // dd($posts);
+
+        // $posts = Post::select('rating',DB::raw("count(address) as count"), DB::raw("AVG(price) as total_price"))
+        // ->groupBy('rating')
+        // ->get()
+        // ->toArray();
+        // dd($posts);
+
+        // $posts = Post::select('rating',DB::raw("count(rating) as rating_count"), DB::raw("AVG(price) as total_price"))
+        // ->groupBy('rating')
+        // ->get()
+        // ->toArray();
+        // dd($posts);
+
+        // $posts = Post::select('rating',DB::raw("count(rating) as rating_count"), DB::raw("SUM(price) as total_price"))
+        // ->groupBy('rating')
+        // ->get()
+        // ->toArray();
+        // dd($posts);
+        
+        // $posts = Post::select('address',DB::raw("count(address) as address_count"), DB::raw("SUM(price) as total_price"))
+        // ->groupBy('address')
+        // ->get()
+        // ->toArray();
+        // dd($posts);
+
+        // dd($posts);
+
+        // dd($posts->toArray());
         return view('create', compact('posts'));
     }
 
