@@ -35,10 +35,11 @@
                     </div>
                 @endif --}}
                 
-                <form action="{{route('post#create')}}" method="POST" class="p-3">
+                <form action="{{route('post#create')}}" method="POST" class="p-3" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group mb-3">
-                    <input type="text" name="postTitle" class="form-control @error('postTitle') is-invalid @enderror" placeholder="Enter Post Title..." value=" {{old('postTitle')}} ">
+                        <label for="">Title</label>
+                    <input type="text" name="postTitle" class="form-control @error('postTitle') is-invalid @enderror" placeholder="Enter Post Title..." value="{{old('postTitle')}}">
                         
                         @error('postTitle')
                             <div class="invalid-feedback">
@@ -46,10 +47,11 @@
                                 {{$message}}
                             </div>
                         @enderror
-
                     </div>
+
                     <div class="form-group mb-3">
-                        <textarea name="postDescription" class="form-control @error('postDescription') is-invalid @enderror" id="" cols="30" placeholder="Enter Post Description" rows="10"> {{old('postDescription')}} </textarea>
+                        <label for="">Description</label>
+                        <textarea name="postDescription" class="form-control @error('postDescription') is-invalid @enderror" id="" cols="30" placeholder="Enter Post Description" rows="10">{{old('postDescription')}}</textarea>
                         @error('postDescription')
                             <div class="invalid-feedback">
                             {{-- <small class="text-danger">Post Description ဖြည့်ရန် လိုအပ်ပါသည်</small> --}}
@@ -57,14 +59,73 @@
                         </div>
                         @enderror
                     </div>
+
+                    <div class="form-group mb-3">
+                        <label for="">Image</label>
+                        <input type="file" name="postImage" class="form-control @error('postImage') is-invalid @enderror">
+                        @error('postImage')
+                            <div class="invalid-feedback">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
+
+
+                    <div class="form-group mb-3">
+                        <label for="">Fee</label>
+                        <input type="number" name="postFee" class="form-control @error('postFee') is-invalid @enderror" placeholder="Enter Post Fee..." value=" {{old('postFee')}} ">
+                            
+                            @error('postFee')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                            @enderror
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="">Address</label>
+                        <input type="text" name="postAddress" class="form-control @error('postAddress') is-invalid @enderror" placeholder="Enter Post Address..." value="{{old('postAddress')}}">
+                            
+                            @error('postAddress')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                            @enderror
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="">Rating</label>
+                        <input type="number" name="postRating" class="form-control @error('postRating') is-invalid @enderror" placeholder="Enter Post Rating..." value=" {{old('postRating')}} " min="0" max="5">
+                            
+                            @error('postRating')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                            @enderror
+                    </div>
+                    
+                    
                     <div class="form-group mt-3">
                         <input type="submit" class="btn btn-primary mb-3" value="Create">
                     </div>
                 </form>
             </div>
             <div class="mb-3 col-12 col-md-7">
-                <h3 class="my-3">Total - {{ $posts->total() }}</h3>
+                <div class="row">
+                    <h3 class="my-3">Total - {{ $posts->total() }}</h3>
+                    <div class="col-5 offset-6">
+                        <form action=" {{route('post#createPage')}} " method="get">
+                            <div class="d-flex input-group ">
+                                <input type="text" value=" {{ request('searchKey') }} " class="form-control" name="searchKey" placeholder="Enter Search Key...">
+                                <button class="btn btn-outline-danger">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
                 <div class="data-container">
+                    @if(count($posts) != 0)   
                     @foreach ($posts as $item )
                     <div class="post p-3 shadow-sm mb-4">
                         <div class="row">
@@ -104,7 +165,10 @@
                             </div>
                         </div>
                     </div>
-                    @endforeach                       
+                    @endforeach
+                    @else
+                        <h3 class="text-danger text-center mt-5">There is not data...</h3>
+                    @endif
 
                     {{-- @for ($i=0;$i<count($posts);$i++)
                     <div class="post p-3 shadow-sm mb-4">
@@ -118,7 +182,7 @@
                     @endfor --}}
                 </div>
 
-                {{$posts->links()}}
+                {{$posts->appends(request()->query())->links()}}
             </div>
         </div>
     </div>

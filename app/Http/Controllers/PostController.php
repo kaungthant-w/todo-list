@@ -11,7 +11,7 @@ class PostController extends Controller
 {
     //customer create page
     public function create() {
-        $posts = Post::orderBy("created_at",'desc')->paginate(3);
+        $posts = Post::orderBy("created_at",'desc')->paginate(2);
 
         // $posts = Post::where("id", "<", "6")->where('address','pyay')->get()->toArray();
         // $posts = Post::where('address','pyay')->get()->toArray();
@@ -163,10 +163,69 @@ class PostController extends Controller
         // dd($posts);
 
         // dd($posts->toArray());
+
+        //map each through
+        // $posts = Post::get()->map(function($post) {
+        //     $post -> title = strtoupper($post->title);
+        //     $post -> description = strtoupper($post -> description);
+        //     return $post;
+        // });
+        // $posts = Post::get()->each(function($post) {
+        //     $post -> title = strtoupper($post->title);
+        //     $post -> description = strtoupper($post -> description);
+        //     $post -> price = $post -> price * 2;
+        //     return $post;
+        // });
+
+        // $posts = Post::paginate(5)->each(function($post) {
+        //     $post -> title = strtoupper($post->title);
+        //     $post -> description = strtoupper($post -> description);
+        //     $post -> price = $post -> price * 2;
+        //     return $post;
+        // });
+
+        // $posts = Post::paginate(5)->through(function($post) {
+        //     $post -> title = strtoupper($post->title);
+        //     $post -> description = strtoupper($post->description);
+        //     $post -> price = $post -> pirce * 2;
+        //     return $post;
+        // });
+
+        // $posts = Post::paginate(5)->map(function($post) {
+        //     $post -> title = strtoupper($post->title);
+        //     $post -> description = strtoupper($post->description);
+        //     $post -> price = $post -> pirce * 2;
+        //     return $post;
+        // });
+
+        // dd($posts -> toarray());
+
+        // dd($_REQUEST['key']);
+        // $post = Post::where("title", $searchKey) -> get() -> toArray();
+        // dd($post);
+        // dd($searchKey);
+        // $post = Post::where("title", 'like', '%'. $searchKey.'%')->get()->toArray();
+        // $post = Post::when(request("key"), function($p){
+        //     $searchKey = $_REQUEST["key"];
+        //     $p -> where("title",'like',"%".$searchKey.'%');
+        // })->paginate(2);
+        // dd($post -> toArray());
+
+        $posts = Post::when(request('searchKey'), function($query){
+                    $key = request("searchKey");
+                    $query -> orWhere("title", "like", "%".$key."%")->orWhere("description", 'like','%'.$key.'%');
+                })
+                ->orderBy("created_at","desc")
+                ->paginate(3);
+                // ->get();
+
+        // dd(count($posts));
+
         return view('create', compact('posts'));
     }
+    
 
-    //post create
+    //post creat
     public function postCreate(Request $request) {
         // dd($request->all());
         // $data = [
@@ -278,14 +337,22 @@ class PostController extends Controller
         // dd($status);
         $validationRules =  [
             'postTitle' => 'required|min:5|max:50|unique:posts,title,'.$request -> postId,
-            'postDescription' => 'required|min:5'
+            'postDescription' => 'required|min:5',
+            'postFee' => 'required',
+            'postAddress' => 'required',
+            'postRating' => 'required',
+            'postImage' => 'required',
         ];
 
         $validationMessage = [
             'postTitle.required' => 'Post Title ဖြည့်ရန် လိုအပ်ပါသည်။',
             'postDescription.required' => 'Post Description  ဖြည့်ရန် လိုအပ်ပါသည်။',
             'postTitle.min' => 'အနည်းဆုံး ၅ လုံးအထက်ရှိရပါမည်။',
-            'postTitle.unique' => 'Post Title ခေါင်းစဉ်တူနေပါသည်။ ထပ်မံ ရိုက်ကြည့်ပါ။'
+            'postTitle.unique' => 'Post Title ခေါင်းစဉ်တူနေပါသည်။ ထပ်မံ ရိုက်ကြည့်ပါ။',
+            'postFee.required' => 'Post Fee ဖြည့်ရန် လိုအပ်ပါသည်။',
+            'postAddress.required' => 'Post Address ဖြည့်ရန် လိုအပ်ပါသည်။',
+            'postRating.required' => 'Post Rating ဖြည့်ရန် လိုအပ်ပါသည်။',
+            'postImage.required' => 'Post Image ဖြည့်ရန် လိုအပ်ပါသည်။',
         ];
 
         Validator::make($request->all(),$validationRules, $validationMessage)->validate();
