@@ -23,3 +23,4 @@ Route::get('post/editPage/{id}', [PostController::class,'editPage'])->name("post
 // Route::post("post/update/{id}", [PostController::class,'update'])->name('post#update');
 
 Route::post('post/update', [PostController::class, 'update'])->name('post#update');
+

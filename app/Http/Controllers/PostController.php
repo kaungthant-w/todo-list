@@ -6,6 +6,7 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Unique;
 
 class PostController extends Controller
 {
@@ -251,8 +252,32 @@ class PostController extends Controller
 
 
         // dd($request->hasFile("postImage") ? 'yes' : 'no');
+        // dd($request->postTitle);
+        // dd($request->postImage);
         // dd($request->file('postImage'));
-        dd($request->postImage);
+
+        // dd($request->file("postImage")->path());
+
+        // dd($request->file("postImage") -> extension());
+        // dd($request->file("postImage") -> getClientOriginalExtension());
+
+        // dd($request->file(("postImage")));
+        
+        if($request->hasFile("postImage")) {
+
+            // $request->file("postImage")->store("myImage");
+            // $request->file("postImage")->storeAs('myImage', 'sithu_codelab.png');
+            // $fileName = $request->file("postImage")->getClientOriginalName();
+
+            // $fileName = uniqid()."_sithu(codelab)_".$request->file("postImage")->getClientOriginalName();
+            
+            $fileName = uniqid().$request->file("postImage")->getClientOriginalName();
+            $request->file("postImage")->storeAs("myImage", $fileName);
+
+            dd("store Success");
+        }
+
+        dd("not have photo");
  
         $this -> postValidationCheck($request);
         $data = $this -> getPostData($request);
