@@ -223,10 +223,12 @@ class PostController extends Controller
 
         return view('create', compact('posts'));
     }
-    
+
 
     //post creat
-    public function postCreate(Request $request) {
+    public function postCreate(Request $request) {        
+        
+        // dd($request->all());
         // dd($request->all());
         // $data = [
         //     'title' => $request -> postTitle,
@@ -247,6 +249,10 @@ class PostController extends Controller
         //             -> withInput();
         // }
 
+
+        // dd($request->hasFile("postImage") ? 'yes' : 'no');
+        // dd($request->file('postImage'));
+        dd($request->postImage);
  
         $this -> postValidationCheck($request);
         $data = $this -> getPostData($request);
@@ -341,7 +347,7 @@ class PostController extends Controller
             'postFee' => 'required',
             'postAddress' => 'required',
             'postRating' => 'required',
-            'postImage' => 'required',
+            // 'postImage' => 'required',
         ];
 
         $validationMessage = [
@@ -352,7 +358,7 @@ class PostController extends Controller
             'postFee.required' => 'Post Fee ဖြည့်ရန် လိုအပ်ပါသည်။',
             'postAddress.required' => 'Post Address ဖြည့်ရန် လိုအပ်ပါသည်။',
             'postRating.required' => 'Post Rating ဖြည့်ရန် လိုအပ်ပါသည်။',
-            'postImage.required' => 'Post Image ဖြည့်ရန် လိုအပ်ပါသည်။',
+            // 'postImage.required' => 'Post Image ဖြည့်ရန် လိုအပ်ပါသည်။',
         ];
 
         Validator::make($request->all(),$validationRules, $validationMessage)->validate();
