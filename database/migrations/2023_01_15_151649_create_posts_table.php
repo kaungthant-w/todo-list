@@ -17,12 +17,15 @@ return new class extends Migration
             $table->id();
             // $table->string('title')->nullable(true);
             // $table->longText("description")->nullable(true);
+            // $table->string("address")->nullable(true)->default("pyay");
+            // $table->double("rating")->nullable(true)->default(0);
+            // $table->integer("price")->nullable(true)->default(2000);
             $table->string('title');
             $table->longText("description");
             $table->string("image")->nullable(true);
-            $table->integer("price")->nullable(true)->default(2000);
-            $table->string("address")->nullable(true)->default("pyay");
-            $table->double("rating")->nullable(true)->default(0);
+            $table->integer("price");
+            $table->string("address");
+            $table->double("rating");
             $table->timestamps();
         });
     }

@@ -62,13 +62,13 @@
 
                     <div class="form-group mb-3">
                         <label for="">Image</label>
-                        <input type="file" name="postImage" class="form-control">
-                        {{-- <input type="file" name="postImage" class="form-control @error('postImage') is-invalid @enderror"> --}}
-                        {{-- @error('postImage')
+                        {{-- <input type="file" name="postImage" class="form-control"> --}}
+                        <input type="file" name="postImage" class="form-control @error('postImage') is-invalid @enderror">
+                        @error('postImage')
                             <div class="invalid-feedback">
                             {{$message}}
                         </div>
-                        @enderror --}}
+                        @enderror
                     </div>
 
 

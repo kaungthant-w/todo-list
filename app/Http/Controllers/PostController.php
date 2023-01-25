@@ -263,6 +263,9 @@ class PostController extends Controller
 
         // dd($request->file(("postImage")));
         
+        // dd($request->file('postImage'));
+        $this -> postValidationCheck($request);
+        
         if($request->hasFile("postImage")) {
 
             // $request->file("postImage")->store("myImage");
@@ -271,17 +274,19 @@ class PostController extends Controller
 
             // $fileName = uniqid()."_sithu(codelab)_".$request->file("postImage")->getClientOriginalName();
             
-            $fileName = uniqid().$request->file("postImage")->getClientOriginalName();
+            $fileName = uniqid().'_'.$request->file("postImage")->getClientOriginalName();
             $request->file("postImage")->storeAs("myImage", $fileName);
+            $data['image'] = $fileName;
 
-            dd("store Success");
+            // dd("store Success");
         }
 
-        dd("not have photo");
+        // dd("not have photo");
  
         $this -> postValidationCheck($request);
         $data = $this -> getPostData($request);
         // dd($data);
+
         Post::create($data);
         // return view('create');
         // return back();
@@ -359,7 +364,11 @@ class PostController extends Controller
 
         return [
             'title' => $request->postTitle,
-            'description' => $request->postDescription
+            'description' => $request->postDescription,
+            'image' => $request->postImage,
+            'price' => $request->postFee,
+            'address' => $request->postAddress,
+            'rating' => $request->postRating
         ];
     }
 
@@ -373,17 +382,20 @@ class PostController extends Controller
             'postAddress' => 'required',
             'postRating' => 'required',
             // 'postImage' => 'required',
+            'postImage' => 'mimes:jpg, jpeg, png|file',
         ];
 
         $validationMessage = [
             'postTitle.required' => 'Post Title ဖြည့်ရန် လိုအပ်ပါသည်။',
-            'postDescription.required' => 'Post Description  ဖြည့်ရန် လိုအပ်ပါသည်။',
-            'postTitle.min' => 'အနည်းဆုံး ၅ လုံးအထက်ရှိရပါမည်။',
             'postTitle.unique' => 'Post Title ခေါင်းစဉ်တူနေပါသည်။ ထပ်မံ ရိုက်ကြည့်ပါ။',
+            'postTitle.min' => 'Post Title အနည်းဆုံး ၅ လုံးအထက်ရှိရပါမည်။',
+            'postDescription.required' => 'Post Description  ဖြည့်ရန် လိုအပ်ပါသည်။',
+            'postDescription.min' => 'Post Description အနည်းဆုံး ၅ လုံးအထက်ရှိရပါမည်။',
             'postFee.required' => 'Post Fee ဖြည့်ရန် လိုအပ်ပါသည်။',
             'postAddress.required' => 'Post Address ဖြည့်ရန် လိုအပ်ပါသည်။',
             'postRating.required' => 'Post Rating ဖြည့်ရန် လိုအပ်ပါသည်။',
             // 'postImage.required' => 'Post Image ဖြည့်ရန် လိုအပ်ပါသည်။',
+            'postImage.mimes' => 'Image သည် PNG JPEG JPG type သာဖြစ်ရပါမည်။'
         ];
 
         Validator::make($request->all(),$validationRules, $validationMessage)->validate();
