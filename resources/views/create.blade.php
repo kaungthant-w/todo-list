@@ -74,35 +74,38 @@
 
                     <div class="form-group mb-3">
                         <label for="">Fee</label>
-                        <input type="number" name="postFee" class="form-control @error('postFee') is-invalid @enderror" placeholder="Enter Post Fee..." value=" {{old('postFee')}} ">
+                        <input type="number" name="postFee" class="form-control" placeholder="Enter Post Fee..." value=" {{old('postFee')}} ">
+                        {{-- <input type="number" name="postFee" class="form-control @error('postFee') is-invalid @enderror" placeholder="Enter Post Fee..." value=" {{old('postFee')}} "> --}}
                             
-                            @error('postFee')
+                            {{-- @error('postFee')
                                 <div class="invalid-feedback">
                                     {{$message}}
                                 </div>
-                            @enderror
+                            @enderror --}}
                     </div>
 
                     <div class="form-group mb-3">
                         <label for="">Address</label>
-                        <input type="text" name="postAddress" class="form-control @error('postAddress') is-invalid @enderror" placeholder="Enter Post Address..." value="{{old('postAddress')}}">
+                        <input type="text" name="postAddress" class="form-control" placeholder="Enter Post Address..." value="{{old('postAddress')}}">
+                        {{-- <input type="text" name="postAddress" class="form-control @error('postAddress') is-invalid @enderror" placeholder="Enter Post Address..." value="{{old('postAddress')}}"> --}}
                             
-                            @error('postAddress')
+                            {{-- @error('postAddress')
                                 <div class="invalid-feedback">
                                     {{$message}}
                                 </div>
-                            @enderror
+                            @enderror --}}
                     </div>
 
                     <div class="form-group mb-3">
                         <label for="">Rating</label>
-                        <input type="number" name="postRating" class="form-control @error('postRating') is-invalid @enderror" placeholder="Enter Post Rating..." value=" {{old('postRating')}} " min="0" max="5">
+                        <input type="number" name="postRating" class="form-control" placeholder="Enter Post Rating..." value=" {{old('postRating')}} " min="0" max="5">
+                        {{-- <input type="number" name="postRating" class="form-control @error('postRating') is-invalid @enderror" placeholder="Enter Post Rating..." value=" {{old('postRating')}} " min="0" max="5"> --}}
                             
-                            @error('postRating')
+                            {{-- @error('postRating')
                                 <div class="invalid-feedback">
                                     {{$message}}
                                 </div>
-                            @enderror
+                            @enderror --}}
                     </div>
                     
                     

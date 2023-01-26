@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+// use Storage;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Unique;
 
@@ -13,6 +15,7 @@ class PostController extends Controller
     //customer create page
     public function create() {
         $posts = Post::orderBy("created_at",'desc')->paginate(2);
+        // dd($posts);
 
         // $posts = Post::where("id", "<", "6")->where('address','pyay')->get()->toArray();
         // $posts = Post::where('address','pyay')->get()->toArray();
@@ -264,7 +267,10 @@ class PostController extends Controller
         // dd($request->file(("postImage")));
         
         // dd($request->file('postImage'));
+        // $this -> postValidationCheck($request);
+        
         $this -> postValidationCheck($request);
+        $data = $this -> getPostData($request);
         
         if($request->hasFile("postImage")) {
 
@@ -273,9 +279,10 @@ class PostController extends Controller
             // $fileName = $request->file("postImage")->getClientOriginalName();
 
             // $fileName = uniqid()."_sithu(codelab)_".$request->file("postImage")->getClientOriginalName();
-            
+            // $request->file("postImage")->storeAs("myImage", $fileName);
+
             $fileName = uniqid().'_'.$request->file("postImage")->getClientOriginalName();
-            $request->file("postImage")->storeAs("myImage", $fileName);
+            $request->file("postImage")->storeAs("public", $fileName);
             $data['image'] = $fileName;
 
             // dd("store Success");
@@ -283,8 +290,6 @@ class PostController extends Controller
 
         // dd("not have photo");
  
-        $this -> postValidationCheck($request);
-        $data = $this -> getPostData($request);
         // dd($data);
 
         Post::create($data);
@@ -313,6 +318,8 @@ class PostController extends Controller
         // dd($id);
         // $post = Post::where('id', $id)->get()->toArray();
         $post = Post::where('id', $id)->first();
+        // dd($post->toArray());
+
         // $post = Post::get()->toArray();
         // $post = Post::first()->toArray();
         // dd($post);
@@ -328,7 +335,7 @@ class PostController extends Controller
     //update post
     // public function update(Request $request, $id) {
     public function update(Request $request) {
-        
+        // dd($request->all());
         // dd($request->postId);
         // dd($request->all());
         // dd($id);
@@ -336,9 +343,30 @@ class PostController extends Controller
         $this -> postValidationCheck($request);
         $updateData = $this -> getPostData($request);
         // dd($updateData);
-
         $id = $request -> postId;
         // dd($id);
+
+        // dd($request->file('postImage'));
+        // dd($request->hasFile('postImage') ? 'yes':'no');
+                
+        if($request->hasFile("postImage")) {
+            // dd($request->all());
+
+            // delete 
+            $oldImagName = Post::select('image')->where("id", $request->postId)->first()->toArray(); 
+            $oldImagName = $oldImagName["image"];
+            // dd($oldImagName);
+
+            if($oldImagName != null) {
+                Storage::delete('public/'.$oldImagName);
+            }            
+
+            $fileName = uniqid().'_'.$request->file("postImage")->getClientOriginalName();
+            $request->file("postImage")->storeAs("public", $fileName);
+            $updateData['image'] = $fileName;
+            
+        }
+        
         Post::where("id", $id)->update($updateData);
         return redirect()->route('post#createPage')->with(['updateSuccess'=>'Update လုပ်ခြင်းအောင်မြင်ပါသည်']);
     }
@@ -362,14 +390,28 @@ class PostController extends Controller
 
         // return $response;
 
-        return [
+        // return [
+        //     'title' => $request->postTitle,
+        //     'description' => $request->postDescription,
+        //     'image' => $request->postImage,
+        //     'price' => $request->postFee,
+        //     'address' => $request->postAddress,
+        //     'rating' => $request->postRating
+        // ];
+
+        $data = [
             'title' => $request->postTitle,
-            'description' => $request->postDescription,
-            'image' => $request->postImage,
-            'price' => $request->postFee,
-            'address' => $request->postAddress,
-            'rating' => $request->postRating
+            'description'=>$request->postDescription,
         ];
+
+        $data['price'] = $request->postFee == null ? 2000 : $request->postFee;
+        $data["address"] = $request->postAddress == null ? "Pyay" : $request->postAddress;
+        $data["rating"] = $request->postRating == null ? 5 : $request-> postRating;
+
+        return $data;
+        // dd($data);
+
+        
     }
 
     //post validation check
@@ -378,11 +420,11 @@ class PostController extends Controller
         $validationRules =  [
             'postTitle' => 'required|min:5|max:50|unique:posts,title,'.$request -> postId,
             'postDescription' => 'required|min:5',
-            'postFee' => 'required',
-            'postAddress' => 'required',
-            'postRating' => 'required',
+            'postImage' => 'mimes:jpg,jpeg,png|file',
+            // 'postFee' => 'required',
+            // 'postAddress' => 'required',
+            // 'postRating' => 'required',
             // 'postImage' => 'required',
-            'postImage' => 'mimes:jpg, jpeg, png|file',
         ];
 
         $validationMessage = [
@@ -391,9 +433,9 @@ class PostController extends Controller
             'postTitle.min' => 'Post Title အနည်းဆုံး ၅ လုံးအထက်ရှိရပါမည်။',
             'postDescription.required' => 'Post Description  ဖြည့်ရန် လိုအပ်ပါသည်။',
             'postDescription.min' => 'Post Description အနည်းဆုံး ၅ လုံးအထက်ရှိရပါမည်။',
-            'postFee.required' => 'Post Fee ဖြည့်ရန် လိုအပ်ပါသည်။',
-            'postAddress.required' => 'Post Address ဖြည့်ရန် လိုအပ်ပါသည်။',
-            'postRating.required' => 'Post Rating ဖြည့်ရန် လိုအပ်ပါသည်။',
+            // 'postFee.required' => 'Post Fee ဖြည့်ရန် လိုအပ်ပါသည်။',
+            // 'postAddress.required' => 'Post Address ဖြည့်ရန် လိုအပ်ပါသည်။',
+            // 'postRating.required' => 'Post Rating ဖြည့်ရန် လိုအပ်ပါသည်။',
             // 'postImage.required' => 'Post Image ဖြည့်ရန် လိုအပ်ပါသည်။',
             'postImage.mimes' => 'Image သည် PNG JPEG JPG type သာဖြစ်ရပါမည်။'
         ];
