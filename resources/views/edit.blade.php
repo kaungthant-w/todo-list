@@ -5,7 +5,6 @@
             <div class="col-10 col-lg-6 offset-2 offset-md-3">
                 <a class="text-decoration-none text-black" href="{{route('post#updatePage', $post['id'])}}"><i class="fa-solid fa-arrow-left"></i> back</a>
 
-                {{-- <form action="{{route('post#update', $post['id'])}}" method="post"> --}}
                     <form action="{{route('post#update')}}" method="post" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="postId" value="{{$post['id']}}">
@@ -22,17 +21,10 @@
                     </div>
                     
                     <div class=" my-4">
-                        {{-- @if ($post['image'] == null)
-                            <img src="{{asset('storage/404_image.jpg')}}" class="img-thumbnail my-4 shadown-sm" alt="">
-                        @else
-                            <img src="{{asset('storage/'.$post['image'])}}" class="img-thumbnail my-4 shadown-sm" alt="">
-                        @endif --}}
-
                         <label for="">Image</label>
                         <img src="{{asset('storage/'.( $post['image'] ? $post['image'] : '404_image.jpg'))}}" class="img-thumbnail shadown-sm" alt="">
 
                         <div class="form-group my-3">
-                            {{-- <input type="file" name="postImage" class="form-control"> --}}
                             <input type="file" name="postImage" class="form-control @error('postImage') is-invalid @enderror" value="{{old('postImage', $post['image'])}}">
                             @error('postImage')
                                 <div class="invalid-feedback">

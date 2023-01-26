@@ -4,7 +4,6 @@
         <div class="row mt-5">
             <div class="col-10 col-lg-6 offset-2 offset-lg-3">
                 <a class="text-decoration-none text-black" href="{{route('post#home')}}"><i class="fa-solid fa-arrow-left"></i> back</a>
-                {{-- <h3 class="my-3">{{$post[0]['title']}}</h3> --}}
 
                 <h3 class="my-3">{{$post['title']}}</h3>
                 <div class="d-flex">
@@ -19,18 +18,11 @@
                 </div>
                 
                 <div class="">
-                    {{-- @if ($post->image == null)
-                    <img src=" {{asset('404_image.jpg')}} " alt="" class="img-thumbnail my-4 shadow-sm">
-                    @else
-                    <img src=" {{asset('storage/'.$post['image'])}} " alt="" class="img-thumbnail my-4 shadow-sm">
-                    @endif --}}
-
                     <img src="{{asset($post['image'] ? 'storage/'.$post['image'] : 'storage/404_image.jpg')}}" alt="" class="img-thumbnail my-4 shadow-sm">
 
                 </div>
                 
                 <p class="text-muted">
-                    {{-- {{$post[0]['description']}} --}}
                     {{$post['description']}}
                 </p>
                 
